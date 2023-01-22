@@ -23,3 +23,14 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
+  octoprint:
+    container_name: octoprint
+    image: octoprint/octoprint
+    volumes:
+      - /opt/octoprint:/octoprint
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+        - 80:80
+    devices:
+        - /dev/ttyUSB0:/dev/ttyUSB0
