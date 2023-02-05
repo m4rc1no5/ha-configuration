@@ -8,40 +8,54 @@ services:
     stdin_open: true
     tty: true
     ports:
-        - "9000:9000/tcp"
+      - "9000:9000/tcp"
     environment:
-        - TZ=Europe/Warsaw
+      - TZ=Europe/Warsaw
     volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /opt/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/portainer:/data
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
-        - /opt/homeassistant/config:/config
-        - /etc/localtime:/etc/localtime:ro
+      - /opt/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     privileged: true
     network_mode: host
     devices:
-        - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/ttyUSB0:/dev/ttyUSB0
   octoprint:
     container_name: octoprint
     image: octoprint/octoprint
     volumes:
-        - /opt/octoprint:/octoprint
-        - /etc/localtime:/etc/localtime:ro
+      - /opt/octoprint:/octoprint
+      - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     ports:
-        - 80:80
+      - 80:80
     devices:
-        - /dev/ttyUSB0:/dev/ttyUSB0
-        - /dev/ttyUSB1:/dev/ttyUSB1
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/ttyUSB1:/dev/ttyUSB1
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
     volumes:
-        - /opt/mosquitto:/mosquitto
+      - /opt/mosquitto:/mosquitto
     ports:
-        - 1883:1883
-        - 9001:9001
+      - 1883:1883
+      - 9001:9001
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Warsaw
+      - CLI_ARGS= #optional
+    volumes:
+      - /opt/duplicati/config:/config
+      - /opt:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
