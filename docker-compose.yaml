@@ -59,3 +59,13 @@ services:
     ports:
       - 8200:8200
     restart: unless-stopped
+  esphome:
+    image: esphome/esphome
+    container_name: esphome
+    volumes:
+      - /opt/esphome/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 6052:6052
+    restart: always
+    privileged: true
